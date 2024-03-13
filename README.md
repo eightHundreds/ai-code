@@ -18,13 +18,13 @@ This works by just taking the current canvas SVG, converting it to a PNG, and se
 看了下源码，并在本地run了一下，研究了一下
 
 draw-a-ui官方效果
-![demo.gif](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/140cc9a7fbcc4518ad3f5de0baa2affe~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=600&h=338&s=1075703&e=gif&f=280&b=f3f5f8)
+![A demo of the app](./demo.gif)
 
 screenshot-to-code官方效果
 
 https://user-images.githubusercontent.com/23818/283006443-6cebadae-2fe3-4986-ac6a-8fb9db030045.mp4
 
-效果是不是很炸裂，身为前端er的我直呼woc
+效果是不是很炸裂，我直呼woc
 
 ## 原理
 
