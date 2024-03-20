@@ -290,10 +290,9 @@ function PromptSettingBtn() {
           }}
                               >
           <div className="mb-4">
-            <label for="system-prompt" className="block text-gray-700 text-sm font-bold mb-2">System Prompt:</label>
+            <label htmlFor="system-prompt" className="block text-gray-700 text-sm font-bold mb-2">System Prompt:</label>
             <textarea
               id="system-prompt"
-              type="text"
               placeholder="输入"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-48"
 
@@ -301,7 +300,7 @@ function PromptSettingBtn() {
             />
           </div>
           <div className="mb-6">
-            <label for="user-input" className="block text-gray-700 text-sm font-bold mb-2">User:</label>
+            <label htmlFor="user-input" className="block text-gray-700 text-sm font-bold mb-2">User:</label>
             <textarea
               id="user-input"
               placeholder="输入"
