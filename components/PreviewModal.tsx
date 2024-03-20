@@ -1,12 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Prism from 'prismjs'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import classNames from 'classnames'
-import 'prismjs/components/prism-cshtml'
-
-import 'prismjs/themes/prism-tomorrow.css'
+import { codeToHtml } from 'shiki'
 import type { CodeItem } from '@/app/store/zustand'
+// import 'prismjs/components/prism-cshtml'
 
 export function PreviewModal({
   codeItem,
@@ -18,11 +16,22 @@ export function PreviewModal({
   const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'image'>('preview')
   const [device, setDevice] = useState<'desktop' | 'mobile'>('desktop')
   useEffect(() => {
-    const highlight = async () => {
-      await Prism.highlightAll() // <--- prepare Prism
-    }
-    highlight() // <--- call the async function
+    // const highlight = async () => {
+    //   await Prism.highlightAll() // <--- prepare Prism
+    // }
+    // highlight() // <--- call the async function
   }, [codeItem, activeTab]) // <--- run when post updates
+  const [html, setHtml] = useState<string>()
+
+  useEffect(() => {
+    codeToHtml(codeItem.html, {
+      lang: 'html',
+      theme: 'nord',
+
+    }).then((html) => {
+      setHtml(html)
+    })
+  }, [])
 
   if (!codeItem)
     return null
@@ -116,15 +125,15 @@ export function PreviewModal({
 
             <iframe
               className={
-          classNames(
-            'border-[4px] border-black rounded-[20px] shadow-lg',
-            'transform scale-[0.9] origin-top',
-            {
-              'w-full h-[832px]': device === 'desktop',
-              'w-[450px] h-[832px]': device === 'mobile',
-            },
-          )
-        }
+                  classNames(
+                    'border-[4px] border-black rounded-[20px] shadow-lg',
+                    'transform scale-[0.9] origin-top',
+                    {
+                      'w-full h-[832px]': device === 'desktop',
+                      'w-[450px] h-[832px]': device === 'mobile',
+                    },
+                  )
+                }
               srcDoc={codeItem.html}
             />
           </div>
@@ -133,9 +142,25 @@ export function PreviewModal({
       {
         activeTab === 'code'
         && (
-          <pre className="overflow-auto p-4">
-            <code className="language-markup">{codeItem.html}</code>
-          </pre>
+          <>
+            <button onClick={() => {
+              navigator.clipboard.writeText(codeItem.html)
+              // 提示
+              alert('已拷贝代码')
+            }}
+            >
+              代码拷贝
+            </button>
+            <div
+              style={{
+                overflow: 'auto',
+              }}
+              dangerouslySetInnerHTML={{
+                __html: html ?? '',
+              }}
+            >
+            </div>
+          </>
         )
       }
       {

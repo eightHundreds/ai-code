@@ -9,3 +9,7 @@
 .tlui-debug-panel {
   display: none !important;
 }
+
+.shiki{
+  white-space: pre-wrap;
+}

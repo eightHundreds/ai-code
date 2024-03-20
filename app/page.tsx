@@ -37,6 +37,7 @@ export default function Home() {
     <>
       <div className="w-screen h-screen">
         <Tldraw persistenceKey="tldraw">
+          <PromptSettingBtn></PromptSettingBtn>
           <ExportButton setCodeItem={setCodeItem} />
           <KeyAndApiSettingBtn></KeyAndApiSettingBtn>
           <HistoryPage></HistoryPage>
@@ -152,30 +153,30 @@ function HistoryPage() {
 
           <div className="relative  overflow-auto  flex-wrap max-h-[600px]  bg-white w-[80%] h-1/2 flex">
             {
-              history?.map((record, index) => (
-                <div key={index} className="w-[200px] flex flex-col items-center h-[200px] border shadow-slate-500 shadow-2xl m-3">
+                history?.map((record, index) => (
+                  <div key={index} className="w-[200px] flex flex-col items-center h-[200px] border shadow-slate-500 shadow-2xl m-3">
 
-                  <img
-                    src={record.png}
-                    className="w-full h-full object-contain"
-                    alt=""
-                    onClick={
-                    () => {
-                      console.log('@@@@@')
-                      setShowCodeItem(record)
-                    }
-                  }
-                  />
-                  <div>{record?.date}</div>
-                </div>
-              )).reverse()
+                    <img
+                      src={record.png}
+                      className="w-full h-full object-contain"
+                      alt=""
+                      onClick={
+                        () => {
+                          console.log('@@@@@')
+                          setShowCodeItem(record)
+                        }
+                      }
+                    />
+                    <div>{record?.date}</div>
+                  </div>
+                )).reverse()
 
-            }
+              }
 
           </div>
           <button
             onClick={() => setShowModal(false)}
-            // 在history list的右上角
+              // 在history list的右上角
             className="bg-red-400 mt-2 p-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring"
           >
             X关闭X
@@ -265,5 +266,74 @@ function KeyAndApiSettingBtn() {
       }
     </>
 
+  )
+}
+
+function PromptSettingBtn() {
+  const [showModal, setShowModal] = useState(false)
+  const { setAiInfo, aiInfo } = useStore()
+  return (
+    <>
+      <button
+        onClick={() => {
+          setShowModal(true)
+        }}
+        className=" z-[1000] fixed bottom-[338px] right-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ="
+      >
+        prompt设置
+      </button>
+      {showModal && (
+        ReactDOM.createPortal(<div
+          className="fixed top-[30px] left-0 right-0 max-w-2xl mx-auto my-10 p-6 bg-white rounded-lg shadow"
+          style={{
+            zIndex: 2000,
+          }}
+                              >
+          <div className="mb-4">
+            <label for="system-prompt" className="block text-gray-700 text-sm font-bold mb-2">System Prompt:</label>
+            <textarea
+              id="system-prompt"
+              type="text"
+              placeholder="输入"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-48"
+
+              defaultValue={aiInfo.systemPrompt}
+            />
+          </div>
+          <div className="mb-6">
+            <label for="user-input" className="block text-gray-700 text-sm font-bold mb-2">User:</label>
+            <textarea
+              id="user-input"
+              placeholder="输入"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+              defaultValue={aiInfo.userPrompt}
+            >
+            </textarea>
+          </div>
+          <div className="flex justify-between">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={() => {
+                const systemPrompt = (document.getElementById('system-prompt') as HTMLInputElement).value
+                const userInput = (document.getElementById('user-input') as HTMLInputElement).value
+                setShowModal(false)
+                setAiInfo({
+                  userPrompt: userInput,
+                  systemPrompt,
+                })
+              }}
+            >
+              提交
+            </button>
+            <button
+              className="bg-gray-200 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={() => setShowModal(false)}
+            >
+              取消
+            </button>
+          </div>
+        </div>, document.body)
+      )}
+    </>
   )
 }

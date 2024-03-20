@@ -23,43 +23,11 @@ import { getGlobalStore } from '@/app/store/zustand'
 // Return only the full code in <html></html> tags.
 // Respond only with the html file.`
 
-const systemPrompt = `# Role: Tailwind CSS Developer
-
-## Task
-
-- Input: Screenshot(s) of a reference web page or Low-fidelity
-- Output: Single HTML page using Tailwind CSS, HTML
-
-## Guidelines
-
-- Utilize Tailwind CSS to develop the website based on the provided screenshot or Low-fidelity
-- Achieve an exact visual match to the provided screenshot or Low-fidelity
-- Pay close attention to:
-  - Background color
-  - Text color
-  - Font size
-  - Font family
-  - Padding
-  - Margin
-  - Border
-- Use the precise text from the screenshot
-- Avoid placeholder comments; write the full code
-- Repeat elements as shown in the screenshot (e.g., if there are 15 items, include 15 items in the code)
-- Use placeholder images from \`https://placehold.co\` with descriptive \`alt\` text for future image generation
-
-## Libraries
-
-- Include Tailwind CSS via: \`<script src="https://cdn.tailwindcss.com"></script>\`
-
-## Deliverable
-
-- Respond with the complete HTML code within \`<html>\` tags
-- Respond with the HTML file content only
-`
-
 export async function getResponseFromAPI(image: string) {
   const endpoint = getGlobalStore().aiInfo.base_url
   const apiKey = getGlobalStore().aiInfo.key
+  const systemPrompt = getGlobalStore().aiInfo.systemPrompt
+  const userPrompt = getGlobalStore().aiInfo.userPrompt
 
   if (!endpoint || !apiKey)
     throw new Error('Please set the API endpoint and key first.')
@@ -89,7 +57,7 @@ export async function getResponseFromAPI(image: string) {
               },
             },
             {
-              text: 'Turn this into a single html file using tailwind.',
+              text: userPrompt,
               type: 'text',
             },
           ],
